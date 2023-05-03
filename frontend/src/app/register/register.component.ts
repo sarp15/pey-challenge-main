@@ -6,24 +6,23 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  constructor(
-    private userService: UserService,
-    private router: Router,
-  ) { }
+  constructor(private userService: UserService, private router: Router) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onFormSubmit(form: NgForm) {
     const name = form.value.name;
     const email = form.value.email;
+    const favouriteColour = form.value.favouriteColour;
 
-    this.userService.postRegister(name, email).subscribe(() => {
-      // Once we've received a response, take the user to the home page
-      this.router.navigateByUrl('/home');
-    })
+    this.userService
+      .postRegister(name, email, favouriteColour)
+      .subscribe(() => {
+        // Once we've received a response, take the user to the home page
+        this.router.navigateByUrl('/home');
+      });
   }
-
 }

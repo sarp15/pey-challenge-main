@@ -4,19 +4,18 @@ import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   // Store variables here so other components can fetch them
   private userDetails?: {
-    name: string
-    email: string
-    userId: string
+    name: string;
+    email: string;
+    userId: string;
+    favouriteColour: string;
   };
 
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   /* Functions to fetch saved data */
 
@@ -26,23 +25,30 @@ export class UserService {
 
   /* Functions to send HTTP requests */
 
-  postRegister(name: string, email: string) {
+  postRegister(name: string, email: string, favouriteColour: string) {
     const url = `${environment.apiUrl}/register`;
 
     const body = {
       name,
       email,
+      favouriteColour,
     };
 
-    return this.http.post<{ user_id: string }>(url, JSON.stringify(body))
-      // read and forward the response to the function caller
-      .pipe(tap((data) => {
-        // Save the user details into this service so we can retrieve it later
-        this.userDetails = {
-          name,
-          email,
-          userId: data.user_id
-        };
-      }));
+    return (
+      this.http
+        .post<{ user_id: string }>(url, JSON.stringify(body))
+        // read and forward the response to the function caller
+        .pipe(
+          tap((data) => {
+            // Save the user details into this service so we can retrieve it later
+            this.userDetails = {
+              name,
+              email,
+              favouriteColour,
+              userId: data.user_id,
+            };
+          })
+        )
+    );
   }
 }
