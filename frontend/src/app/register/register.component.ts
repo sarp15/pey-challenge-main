@@ -18,6 +18,10 @@ export class RegisterComponent implements OnInit {
     const email = form.value.email;
     const favouriteColour = form.value.favouriteColour;
 
+    if (!(validEmail(email) && validName(name) && validName(favouriteColour))) {
+      return;
+    }
+
     this.userService
       .postRegister(name, email, favouriteColour)
       .subscribe(() => {
@@ -26,3 +30,15 @@ export class RegisterComponent implements OnInit {
       });
   }
 }
+
+const validEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+const validName = (name: string) => {
+  return /^[a-zA-Z ]+$/.test(name);
+};
